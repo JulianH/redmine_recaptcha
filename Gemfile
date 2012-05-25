@@ -1,1 +1,3 @@
-gem "recaptcha", :require => "recaptcha/rails"
+source :rubygems
+
+gem "recaptcha"

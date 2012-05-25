@@ -10,12 +10,12 @@ module AccountControllerPatch
   module InstanceMethods
     def register_with_recaptcha_verification
       redirect_to(home_url) && return unless Setting.self_registration? || session[:auth_source_registration]
-
       if request.get?
         session[:auth_source_registration] = nil
         @user = User.new(:language => Setting.default_language)
       else
-        @user = User.new(params[:user])
+        @user = User.new
+        @user.safe_attributes = params[:user]
         @user.admin = false
         @user.register
         if session[:auth_source_registration]
@@ -30,7 +30,8 @@ module AccountControllerPatch
           end
         else
           @user.login = params[:user][:login]
-          @user.password, @user.password_confirmation = params[:password], params[:password_confirmation]
+          @user.password, @user.password_confirmation = params[:user][:password], params[:user][:password_confirmation]
+
           if verify_recaptcha( :private_key => Setting.plugin_redmine_recaptcha['recaptcha_private_key'], :model => @user, :message => "There was an error with the recaptcha code below. Please re-enter the code and click submit." )
             case Setting.self_registration
             when '1'
@@ -42,9 +43,6 @@ module AccountControllerPatch
             end
           end
         end
-
-        #the old method is accessible here:
-        #register_without_recaptcha_verification
       end
     end
   end
