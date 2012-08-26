@@ -1,0 +1,2 @@
+<%= render :file => 'app/views/messages/_form.html.erb', :locals => {:f => f, :replying => true} %>
+<%= recaptcha_tags :public_key => Setting.plugin_redmine_recaptcha['recaptcha_public_key'],:ssl => true if User.current.anonymous? %>

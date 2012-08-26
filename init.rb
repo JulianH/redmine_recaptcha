@@ -13,12 +13,18 @@ Rails.configuration.to_prepare do
   require_dependency 'account_controller'
   require_dependency 'account_controller_patch'
   AccountController.send(:include, AccountControllerPatch) 
+  require_dependency 'issues_controller'
+  require_dependency 'issues_controller_patch'
+  IssuesController.send(:include, IssuesControllerPatch) 
+  require_dependency 'messages_controller'
+  require_dependency 'messages_controller_patch'
+  MessagesController.send(:include, MessagesControllerPatch) 
 end
 
 Redmine::Plugin.register :redmine_recaptcha do
   name 'reCAPTCHA for user self registration'
   author 'Shane StClair'
-  description 'Adds a recaptcha to the user self registration screen to combat spam'
+  description 'Adds a recaptcha to the user self registration, issues and forum'
   version '0.1.0'
   url 'http://github.com/srstclair/redmine_recaptcha'
   requires_redmine :version_or_higher => '2.0.0'
